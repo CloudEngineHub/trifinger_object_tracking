@@ -7,6 +7,10 @@
 
 #include <chrono>
 #include <filesystem>
+#include <memory>
+
+#include <opencv2/opencv.hpp>
+#include <fope/fope.hpp>
 
 #include <robot_interfaces/sensors/sensor_driver.hpp>
 #include <trifinger_cameras/camera_parameters.hpp>
@@ -101,8 +105,14 @@ public:
 private:
     trifinger_cameras::TriCameraDriver camera_driver_;
     trifinger_object_tracking::CubeDetector cube_detector_;
+    std::unique_ptr<fope::PoseEstimator> fope_;
 
     ObjectPose previous_pose_;
+
+    void init_fope();
+
+    TriCameraObjectObservation get_observation_color();
+    TriCameraObjectObservation get_observation_fope();
 };
 
 }  // namespace trifinger_object_tracking
